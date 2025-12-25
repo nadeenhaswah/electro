@@ -1,10 +1,13 @@
 <?php
+require_once '../config/database.php';
 session_start();
 // في الواقع الحقيقي، يجب التحقق من صلاحية المستخدم
 // if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_role'] != 'admin') {
 //     header('Location: login.php');
 //     exit;
 // }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,37 +42,9 @@ session_start();
                 </a>
 
                 <div class="d-flex align-items-center">
-                    <div class="dropdown me-3">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="notificationsDropdown" data-bs-toggle="dropdown">
-                            <i class="fas fa-bell"></i>
-                            <span class="badge bg-danger">3</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <h6 class="dropdown-header">Notifications</h6>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-shopping-cart text-primary"></i> 5 new orders
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-comment text-success"></i> 12 new comments
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-user text-warning"></i> 3 new users
-                            </a>
-                        </div>
-                    </div>
 
-                    <div class="dropdown">
-                        <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown">
-                            <div class="avatar me-2">A</div>
-                            <span>Admin User</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a>
-                            <a class="dropdown-item" href="settings.php"><i class="fas fa-cog me-2"></i>Settings</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
-                        </div>
-                    </div>
+
+
                 </div>
             </div>
         </nav>
@@ -148,17 +123,15 @@ session_start();
                                 Settings
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../login.php">
+                                <i class="fas fa-sign-out-alt me-2"></i>
+                                Logout
+                            </a>
+                        </li>
                     </ul>
 
-                    <div class="sidebar-footer mt-4">
-                        <div class="card bg-dark text-white">
-                            <div class="card-body">
-                                <h6><i class="fas fa-chart-line me-2"></i>Quick Stats</h6>
-                                <small class="text-muted">Today: $4,250</small><br>
-                                <small class="text-muted">Orders: 42</small>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </nav>
 
@@ -166,14 +139,7 @@ session_start();
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Admin Dashboard</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <button class="btn btn-sm btn-outline-secondary me-2">
-                            <i class="fas fa-download"></i> Export
-                        </button>
-                        <button class="btn btn-sm btn-primary">
-                            <i class="fas fa-plus"></i> Add New
-                        </button>
-                    </div>
+
                 </div>
 
                 <!-- Stats Cards -->
@@ -181,19 +147,29 @@ session_start();
                     <div class="col-md-3">
                         <div class="card stat-card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <h6 class="text-muted">Total Users</h6>
-                                        <h3>1,254</h3>
-                                    </div>
+                                <?php
+                                $sql = "SELECT COUNT(*) AS total_rows FROM users ";
+                                $result = $db->query($sql);
+                                $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+                                if (count($rows) > 0):
+                                    foreach ($rows as $row): ?>
+
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <h6 class="text-muted">Total Users</h6>
+                                                <h3><?= $row['total_rows'] ?></h3>
+                                            </div>
+                                    <?php
+                                    endforeach;
+                                endif;
+                                    ?>
                                     <div class="stat-icon">
                                         <i class="fas fa-users text-primary"></i>
                                     </div>
-                                </div>
-                                <div class="progress mt-2">
-                                    <div class="progress-bar bg-primary" style="width: 75%"></div>
-                                </div>
-                                <small class="text-muted">+12% from last month</small>
+                                        </div>
+                                        <div class="progress mt-2">
+                                            <div class="progress-bar bg-primary" style="width: 20%"></div>
+                                        </div>
                             </div>
                         </div>
                     </div>
@@ -202,17 +178,26 @@ session_start();
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h6 class="text-muted">Total Products</h6>
-                                        <h3>568</h3>
+                                        <?php
+                                        $sql = "SELECT COUNT(*) AS total_rows FROM items ";
+                                        $result = $db->query($sql);
+                                        $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+                                        if (count($rows) > 0):
+                                            foreach ($rows as $row): ?>
+                                                <h6 class="text-muted">Total Products</h6>
+                                                <h3><?= $row['total_rows'] ?></h3>
                                     </div>
-                                    <div class="stat-icon">
-                                        <i class="fas fa-box text-success"></i>
-                                    </div>
+                            <?php
+                                            endforeach;
+                                        endif;
+                            ?>
+                            <div class="stat-icon">
+                                <i class="fas fa-box text-success"></i>
+                            </div>
                                 </div>
                                 <div class="progress mt-2">
-                                    <div class="progress-bar bg-success" style="width: 60%"></div>
+                                    <div class="progress-bar bg-success" style="width: 10%"></div>
                                 </div>
-                                <small class="text-muted">+8% from last month</small>
                             </div>
                         </div>
                     </div>
@@ -221,17 +206,26 @@ session_start();
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h6 class="text-muted">Total Orders</h6>
-                                        <h3>2,845</h3>
+                                        <?php
+                                        $sql = "SELECT COUNT(*) AS total_rows FROM  orders ";
+                                        $result = $db->query($sql);
+                                        $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+                                        if (count($rows) > 0):
+                                            foreach ($rows as $row): ?>
+                                                <h6 class="text-muted">Total Orders</h6>
+                                                <h3><?= $row['total_rows'] ?></h3>
                                     </div>
-                                    <div class="stat-icon">
-                                        <i class="fas fa-shopping-cart text-warning"></i>
-                                    </div>
+                            <?php
+                                            endforeach;
+                                        endif;
+                            ?>
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-cart text-warning"></i>
+                            </div>
                                 </div>
                                 <div class="progress mt-2">
-                                    <div class="progress-bar bg-warning" style="width: 85%"></div>
+                                    <div class="progress-bar bg-warning" style="width: 4%"></div>
                                 </div>
-                                <small class="text-muted">+25% from last month</small>
                             </div>
                         </div>
                     </div>
@@ -240,17 +234,26 @@ session_start();
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
-                                        <h6 class="text-muted">Revenue</h6>
-                                        <h3>$45,250</h3>
+                                        <?php
+                                        $sql = "SELECT SUM(total_price) AS total_prices FROM orders ";
+                                        $result = $db->query($sql);
+                                        $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+                                        if (count($rows) > 0):
+                                            foreach ($rows as $row): ?>
+                                                <h6 class="text-muted">Revenue</h6>
+                                                <h3><?= $row['total_prices'] ?></h3>
                                     </div>
-                                    <div class="stat-icon">
-                                        <i class="fas fa-dollar-sign text-danger"></i>
-                                    </div>
+                            <?php
+                                            endforeach;
+                                        endif;
+                            ?>
+                            <div class="stat-icon">
+                                <i class="fas fa-dollar-sign text-danger"></i>
+                            </div>
                                 </div>
                                 <div class="progress mt-2">
-                                    <div class="progress-bar bg-danger" style="width: 90%"></div>
+                                    <div class="progress-bar bg-danger" style="width: 50%"></div>
                                 </div>
-                                <small class="text-muted">+18% from last month</small>
                             </div>
                         </div>
                     </div>
