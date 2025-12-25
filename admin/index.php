@@ -252,7 +252,7 @@ session_start();
                             </div>
                                 </div>
                                 <div class="progress mt-2">
-                                    <div class="progress-bar bg-danger" style="width: 50%"></div>
+                                    <div class="progress-bar bg-danger" style="width: 30%"></div>
                                 </div>
                             </div>
                         </div>
@@ -280,54 +280,40 @@ session_start();
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>#ORD-7841</td>
-                                                <td>John Doe</td>
-                                                <td>2023-12-24</td>
-                                                <td>$249.99</td>
-                                                <td><span class="badge bg-warning">Processing</span></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-outline-primary">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>#ORD-7840</td>
-                                                <td>Jane Smith</td>
-                                                <td>2023-12-24</td>
-                                                <td>$599.99</td>
-                                                <td><span class="badge bg-success">Completed</span></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-outline-primary">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>#ORD-7839</td>
-                                                <td>Robert Johnson</td>
-                                                <td>2023-12-23</td>
-                                                <td>$129.99</td>
-                                                <td><span class="badge bg-primary">Shipped</span></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-outline-primary">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>#ORD-7838</td>
-                                                <td>Emily Davis</td>
-                                                <td>2023-12-23</td>
-                                                <td>$899.99</td>
-                                                <td><span class="badge bg-danger">Cancelled</span></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-outline-primary">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                            <?php
+                                            $sql = "SELECT 
+                                                o.order_id,
+                                                CONCAT(u.first_name, ' ', u.last_name) AS customer,
+                                                o.created_at AS order_date,
+                                                o.total_price AS amount,
+                                                o.status
+                                            FROM orders o
+                                            INNER JOIN users u ON o.user_id = u.user_id
+                                            ORDER BY o.created_at DESC";
+                                            $result = $db->query($sql);
+                                            $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+                                            if (count($rows) > 0):
+                                                foreach ($rows as $row): ?>
+
+                                                    <tr>
+                                                        <td><?= $row['order_id'] ?></td>
+                                                        <td><?= $row['customer'] ?></td>
+                                                        <td><?= $row['order_date'] ?></td>
+                                                        <td><?= $row['amount'] ?></td>
+                                                        <td><span class="badge bg-warning"><?= $row['status'] ?></span></td>
+                                                        <td>
+                                                            <a href="order_view.php?id=<?= $order['order_id']; ?>" class="btn btn-sm btn-primary">
+                                                                View
+                                                            </a>
+
+                                                        </td>
+                                                    </tr>
+                                            <?php
+                                                endforeach;
+                                            endif;
+                                            ?>
+
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -342,26 +328,34 @@ session_start();
                             </div>
                             <div class="card-body">
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        MacBook Pro 16"
-                                        <span class="badge bg-primary rounded-pill">42 sales</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        iPhone 15 Pro Max
-                                        <span class="badge bg-primary rounded-pill">38 sales</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Sony WH-1000XM5
-                                        <span class="badge bg-primary rounded-pill">31 sales</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Samsung Odyssey G9
-                                        <span class="badge bg-primary rounded-pill">24 sales</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        Canon EOS R5
-                                        <span class="badge bg-primary rounded-pill">18 sales</span>
-                                    </li>
+                                    <?php
+                                    $sql = "SELECT 
+                                        i.item_id,
+                                        i.name,
+                                        SUM(oi.quantity) AS total_sales
+                                    FROM order_items oi
+                                    INNER JOIN items i ON oi.item_id = i.item_id
+                                    INNER JOIN orders o ON oi.order_id = o.order_id
+                                    WHERE o.status IN ('completed', 'shipped')
+                                    GROUP BY i.item_id, i.name
+                                    ORDER BY total_sales DESC
+                                    LIMIT 5;
+                                    ";
+                                    $result = $db->query($sql);
+                                    $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+                                    if (count($rows) > 0):
+                                        foreach ($rows as $row): ?>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <?= htmlspecialchars($row['name']); ?>
+                                                <span class="badge bg-primary rounded-pill"> <?= $row['total_sales']; ?> sales</span>
+                                            </li>
+                                    <?php
+                                        endforeach;
+                                    endif;
+                                    ?>
+
+
+
                                 </ul>
                             </div>
                         </div>
