@@ -1,3 +1,6 @@
+<?php
+require_once './config/database.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -320,7 +323,7 @@
                             <h2>Join Electro Today</h2>
                             <p>Create an account to enjoy exclusive benefits including faster checkout, order tracking, and personalized recommendations.</p>
                             <div class="mt-4">
-                                <h4>Already a Member?</h4>
+                                <h4 style="color: #e4e7ed8e;">Already a Member?</h4>
                                 <p>If you already have an account, just sign in to access your profile and continue shopping.</p>
                                 <a href="login.php" class="btn btn-outline-light mt-3">Login Now</a>
                             </div>
@@ -339,48 +342,44 @@
                                 </div>
 
                                 <!-- Signup form -->
-                                <form id="signupForm">
+                                <form id="signupForm" method="POST" action="auth/signup.php">
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="firstName" class="form-label">First Name</label>
-                                            <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" required>
+                                            <input type="text" name="first_name" class="form-control" id="firstName" placeholder="Enter your first name" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="lastName" class="form-label">Last Name</label>
-                                            <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" required>
+                                            <input type="text" name="last_name" class="form-control" id="lastName" placeholder="Enter your last name" required>
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="signupEmail" class="form-label">Email Address</label>
-                                        <input type="email" class="form-control" id="signupEmail" placeholder="Enter your email" required>
+                                        <input type="email" name="email" class="form-control" id="signupEmail" placeholder="Enter your email" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="mobile" class="form-label">Mobile Number</label>
-                                        <input type="tel" class="form-control" id="mobile" placeholder="Enter your mobile number" required>
+                                        <input type="number" name="mobile" class="form-control" id="mobile" placeholder="Enter your mobile number" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="signupPassword" class="form-label">Password</label>
-                                        <input type="password" class="form-control" id="signupPassword" placeholder="Create a password" required>
+                                        <input type="password" name="password" class="form-control" id="signupPassword" placeholder="Create a password" required>
                                         <div class="form-text">Password must be at least 8 characters long</div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="confirmPassword" class="form-label">Confirm Password</label>
-                                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                                        <input type="password" name="confirmPass" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
                                     </div>
 
-
-
-
-
-                                    <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                                    <button type="submit" name="submit" class="btn btn-primary w-100">Create Account</button>
                                 </form>
 
                                 <div class="login-link">
-                                    Already have an account? <a href="login.pph">Login here</a>
+                                    Already have an account? <a href="login.php">Login here</a>
                                 </div>
                             </div>
                         </div>
