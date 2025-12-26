@@ -223,8 +223,6 @@ session_start();
                         if (count($itemdata) > 0):
                             foreach ($itemdata as $item) :
 
-
-
                             endforeach;
                         endif;
                         ?>
@@ -252,12 +250,14 @@ session_start();
 
                                             <?php
                                             $sql = "
-                            SELECT 
-                                i.*
-                            FROM order_items oi
-                            INNER JOIN items i ON oi.item_id = i.item_id
-                            WHERE oi.order_id = ?
-                        ";
+                                        SELECT 
+                                            i.*,
+                                            oi.quantity,
+                                            oi.price AS price_at_order
+                                        FROM order_items oi
+                                        INNER JOIN items i ON oi.item_id = i.item_id
+                                        WHERE oi.order_id = ?
+                                    ";
 
                                             $result = $db->query($sql, $params);
                                             $itemdata = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -273,16 +273,25 @@ session_start();
                                                         </td>
                                                         <td>
                                                             <div class="d-flex flex-column">
-                                                                <span class="fw-bold">JOD <?= $item['price'] ?>    </span>
-                                                                <small class="text-success">10% discount applied</small>
-                                                                <small><del>$1,444.43</del></small>
+                                                                <?php
+                                                                $discount = ($item['price'] * $item['discount_value']) / 100;
+                                                                $priceAfterDiscount = $item['price'] - $discount;
+                                                                ?>
+                                                                <span class="fw-bold">JOD <?= $priceAfterDiscount ?> </span>
+                                                                <small class="text-success">
+                                                                    <?= !empty($item['discount_value']) ? $item['discount_value'] . '% discount applied' : '' ?>
+                                                                </small>
+                                                                <small><del>JOD <?= $item['price'] ?></del></small>
                                                             </div>
                                                         </td>
+
+
                                                         <td>
-                                                            <span class="badge bg-secondary">1</span>
+                                                            <span class="badge bg-secondary"><?= $item['quantity']; ?></span>
                                                         </td>
                                                         <td>
-                                                            <strong>$1,299.99</strong>
+
+                                                            <strong>JOD <?= $priceAfterDiscount * $item['quantity'] ?></strong>
                                                         </td>
                                                     </tr>
                                             <?php
@@ -293,48 +302,12 @@ session_start();
 
 
 
+
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="row text-end">
-                                            <div class="col-6">
-                                                <p class="mb-1">Subtotal:</p>
-                                            </div>
-                                            <div class="col-6">
-                                                <p class="mb-1">$1,499.96</p>
-                                            </div>
-                                            <div class="col-6">
-                                                <p class="mb-1">Discount:</p>
-                                            </div>
-                                            <div class="col-6">
-                                                <p class="mb-1 text-success">-$149.99</p>
-                                            </div>
-                                            <div class="col-6">
-                                                <p class="mb-1">Shipping:</p>
-                                            </div>
-                                            <div class="col-6">
-                                                <p class="mb-1">$0.00</p>
-                                            </div>
-                                            <div class="col-6">
-                                                <p class="mb-1">Tax:</p>
-                                            </div>
-                                            <div class="col-6">
-                                                <p class="mb-1">$120.00</p>
-                                            </div>
-                                            <div class="col-6">
-                                                <h5 class="mb-0">Total:</h5>
-                                            </div>
-                                            <div class="col-6">
-                                                <h5 class="mb-0 text-primary">$1,649.97</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                           
                         </div>
 
 
