@@ -194,19 +194,52 @@ session_start();
                                 </div>
                             </div>
                         </div>
+                        <?php
+                        $sql = "SELECT * FROM orders WHERE order_id  = ?";
+                        $result = $db->query($sql, $params);
+                        $rows =  $result->fetchAll(PDO::FETCH_ASSOC);
+                        // print_r($rows);
+                        if (count($rows) > 0):
+                            foreach ($rows as $row) :
+                                $total = $row['total_price'];
+                            endforeach;
+                        endif;
+                        ?>
 
                         <!-- Order Items -->
+                        <?php
+                        $sql = "
+                            SELECT 
+                                i.*
+                            FROM order_items oi
+                            INNER JOIN items i ON oi.item_id = i.item_id
+                            WHERE oi.order_id = ?
+                        ";
+
+                        $result = $db->query($sql, $params);
+                        $itemdata = $result->fetchAll(PDO::FETCH_ASSOC);
+
+                        // print_r($itemdata);
+                        if (count($itemdata) > 0):
+                            foreach ($itemdata as $item) :
+
+
+
+                            endforeach;
+                        endif;
+                        ?>
+
                         <div class="card mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">Order Items (3 items)</h5>
-                                <span class="badge bg-primary">Total: $1,649.97</span>
+
+                                <h5 class="mb-0">Order Items (<?= count($itemdata) ?>)</h5>
+                                <span class="badge bg-primary">Total: JOD <?= $total ?></span>
                             </div>
                             <div class="card-body p-0">
                                 <div class="table-responsive">
                                     <table class="table table-hover mb-0">
                                         <thead>
                                             <tr>
-                                                <th style="width: 80px;"></th>
                                                 <th>Product</th>
                                                 <th>Price</th>
                                                 <th>Quantity</th>
@@ -215,79 +248,51 @@ session_start();
                                         </thead>
                                         <tbody>
                                             <!-- Item 1 -->
-                                            <tr>
-                                                <td>
-                                                    <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-                                                        class="product-img-sm" alt="Laptop">
-                                                </td>
-                                                <td>
-                                                    <h6 class="mb-1">MacBook Pro 16"</h6>
-                                                    <small class="text-muted">SKU: MBP16-2023</small><br>
-                                                    <small class="text-muted">Category: Laptops</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column">
-                                                        <span class="fw-bold">$1,299.99</span>
-                                                        <small class="text-success">10% discount applied</small>
-                                                        <small><del>$1,444.43</del></small>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-secondary">1</span>
-                                                </td>
-                                                <td>
-                                                    <strong>$1,299.99</strong>
-                                                </td>
-                                            </tr>
 
-                                            <!-- Item 2 -->
-                                            <tr>
-                                                <td>
-                                                    <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-                                                        class="product-img-sm" alt="Mouse">
-                                                </td>
-                                                <td>
-                                                    <h6 class="mb-1">Wireless Mouse Pro</h6>
-                                                    <small class="text-muted">SKU: WMP-2023</small><br>
-                                                    <small class="text-muted">Category: Accessories</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column">
-                                                        <span class="fw-bold">$49.99</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-secondary">2</span>
-                                                </td>
-                                                <td>
-                                                    <strong>$99.98</strong>
-                                                </td>
-                                            </tr>
 
-                                            <!-- Item 3 -->
-                                            <tr>
-                                                <td>
-                                                    <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-                                                        class="product-img-sm" alt="Laptop Bag">
-                                                </td>
-                                                <td>
-                                                    <h6 class="mb-1">Laptop Backpack</h6>
-                                                    <small class="text-muted">SKU: LBP-2023</small><br>
-                                                    <small class="text-muted">Category: Accessories</small>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex flex-column">
-                                                        <span class="fw-bold">$99.99</span>
-                                                        <small class="text-success">Free shipping</small>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-secondary">1</span>
-                                                </td>
-                                                <td>
-                                                    <strong>$99.99</strong>
-                                                </td>
-                                            </tr>
+                                            <?php
+                                            $sql = "
+                            SELECT 
+                                i.*
+                            FROM order_items oi
+                            INNER JOIN items i ON oi.item_id = i.item_id
+                            WHERE oi.order_id = ?
+                        ";
+
+                                            $result = $db->query($sql, $params);
+                                            $itemdata = $result->fetchAll(PDO::FETCH_ASSOC);
+
+                                            // print_r($itemdata);
+                                            if (count($itemdata) > 0):
+                                                foreach ($itemdata as $item) :
+                                            ?>
+                                                    <tr>
+
+                                                        <td>
+                                                            <h6 class="mb-1"><?= $item['name'] ?></h6>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex flex-column">
+                                                                <span class="fw-bold">JOD <?= $item['price'] ?>    </span>
+                                                                <small class="text-success">10% discount applied</small>
+                                                                <small><del>$1,444.43</del></small>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-secondary">1</span>
+                                                        </td>
+                                                        <td>
+                                                            <strong>$1,299.99</strong>
+                                                        </td>
+                                                    </tr>
+                                            <?php
+                                                endforeach;
+                                            endif;
+                                            ?>
+
+
+
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -412,55 +417,69 @@ session_start();
                             <div class="card-header">
                                 <h5 class="mb-0">Payment Information</h5>
                             </div>
-                            <div class="card-body">
-                                <div class="payment-card mb-3">
-                                    <div class="d-flex justify-content-between align-items-start mb-3">
-                                        <div>
-                                            <h6 class="mb-1">VISA</h6>
-                                            <small class="opacity-75">Credit Card</small>
+                            <?php
+                            // $id = $_GET['id'];
+                            // $params[] = $id;
+
+                            $sql1 = "SELECT * FROM payments WHERE order_id = ?";
+                            $result1 = $db->query($sql1, $params);
+                            $rows1 =  $result1->fetchAll(PDO::FETCH_ASSOC);
+                            if (count($rows1) > 0):
+                                foreach ($rows1 as $row) :
+                                    $paymentDate = $row['payment_date'];
+                                    $paymentStatus = $row['payment_status'];
+
+                            ?>
+                                    <div class="card-body">
+                                        <div class="payment-card mb-3">
+                                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                                <div>
+                                                    <h6 class="mb-1 text-white">VISA</h6>
+                                                    <small class="opacity-75"><?= $row['payment_method'] ?></small>
+                                                </div>
+                                                <i class="fas fa-credit-card fa-2x"></i>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <small class="">Card Number</small>
+                                                <h4 class="mb-0"><?= $row['card_number'] ?></h4>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <small class="opacity-75">Cardholder</small>
+                                                    <p class="mb-0"><?= $row['cardholder_name'] ?></p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <small class="opacity-75">Expires</small>
+                                                    <p class="mb-0"><?= $row['expiry_date'] ?></p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <i class="fas fa-credit-card fa-2x"></i>
+
+                                        <div class="mb-3">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <small class="text-muted">Payment ID:</small>
+                                                    <p class="mb-0">#<?= $row['payment_id'] ?></p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <small class="text-muted">Date:</small>
+                                                    <p class="mb-0"><?= $row['payment_date'] ?></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="alert alert-success">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            <strong>Payment Status:</strong> <?= $row['payment_status'] ?>
+                                        </div>
+
+
                                     </div>
-
-                                    <div class="mb-3">
-                                        <small class="opacity-75">Card Number</small>
-                                        <h4 class="mb-0">**** **** **** 4242</h4>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <small class="opacity-75">Cardholder</small>
-                                            <p class="mb-0">JOHN DOE</p>
-                                        </div>
-                                        <div class="col-6">
-                                            <small class="opacity-75">Expires</small>
-                                            <p class="mb-0">12/25</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <small class="text-muted">Payment ID:</small>
-                                            <p class="mb-0">#PAY-7841</p>
-                                        </div>
-                                        <div class="col-6">
-                                            <small class="text-muted">Date:</small>
-                                            <p class="mb-0">Dec 24, 2023</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="alert alert-success">
-                                    <i class="fas fa-check-circle me-2"></i>
-                                    <strong>Payment Status:</strong> Completed
-                                </div>
-
-                                <button class="btn btn-outline-primary btn-sm w-100" data-bs-toggle="modal" data-bs-target="#paymentDetailsModal">
-                                    <i class="fas fa-search me-1"></i> View Payment Details
-                                </button>
-                            </div>
+                            <?php
+                                endforeach;
+                            endif; ?>
                         </div>
 
                         <!-- Order Actions -->
