@@ -307,7 +307,7 @@ session_start();
                                 </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="categories.php" type="button" class="btn btn-secondary mx-3" data-bs-dismiss="modal">Cancel</a>
+                        <a href="categories.php" type="button" class="btn btn-secondary mx-3" >Cancel</a>
                         <button type="submit" name="submit" class="btn btn-primary">Create Category</button>
                     </div>
             <?php
