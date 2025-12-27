@@ -224,62 +224,7 @@ require_once '../config/database.php';
             </div>
         </div>
     </div>
-    <!-- Edit User Modal -->
-    <div class="modal fade" id="editUserModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title text-white">Edit User Information</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <form class="needs-validation" novalidate method="POST" action="add_user.php">
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">First Name *</label>
-                                <input type="text" name="first_name" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Last Name *</label>
-                                <input type="text" name="last_name" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email Address *</label>
-                            <input type="email" name="email" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Mobile Number</label>
-                            <input type="number" name="mobile" class="form-control">
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Password *</label>
-                                <input type="password" name="password" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Confirm Password *</label>
-                                <input type="password" name="confirmPass" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Role *</label>
-                            <select class="form-select" name="role" required>
-                                <option value="">Select Role</option>
-                                <option value="admin">Administrator</option>
-                                <option value="user">User</option>
-                            </select>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" name="submit" class="btn btn-primary">Add User</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- Delete Confirmation Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1">

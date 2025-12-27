@@ -34,7 +34,6 @@ session_start();
 
 <body>
     <!-- Header -->
-
     <?php
     include('includes/header.php');
     ?>
@@ -211,7 +210,19 @@ session_start();
                                                         <td><?= $row['customer'] ?></td>
                                                         <td><?= $row['order_date'] ?></td>
                                                         <td><?= $row['amount'] ?></td>
-                                                        <td><span class="badge bg-warning"><?= $row['status'] ?></span></td>
+                                                        <?php
+                                                        if ($row['status'] == 'processing') {
+                                                            $statusBadge = 'primary';
+                                                        } elseif ($row['status'] == 'completed') {
+                                                            $statusBadge = 'success';
+                                                        } elseif ($row['status'] == 'cancelled') {
+                                                            $statusBadge = 'danger';
+                                                        } else {
+                                                            $statusBadge = 'secondary';
+                                                        }
+                                                        ?>
+
+                                                        <td><span class="badge bg-<?= $statusBadge;  ?>"><?= $row['status'] ?></span></td>
                                                         <td>
                                                             <a href="viewOrder.php?id=<?= $row['order_id']; ?>" class="btn btn-sm btn-primary">
                                                                 View
