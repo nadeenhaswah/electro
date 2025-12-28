@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Cart Controller
  * Handles shopping cart operations
@@ -10,12 +11,14 @@ require_once dirname(__DIR__) . '/classes/Cart.php';
 require_once dirname(__DIR__) . '/classes/Product.php';
 require_once dirname(__DIR__) . '/classes/ItemImage.php';
 
-class CartController {
+class CartController
+{
     private $cart;
     private $product;
     private $itemImage;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->cart = new Cart();
         $this->product = new Product();
         $this->itemImage = new ItemImage();
@@ -24,9 +27,10 @@ class CartController {
     /**
      * Get or create cart
      */
-    private function getCart() {
+    private function getCart()
+    {
         startSession();
-        
+
         if (isLoggedIn()) {
             return $this->cart->getOrCreateCart($_SESSION['user_id'], null);
         } else {
@@ -40,7 +44,8 @@ class CartController {
     /**
      * View cart
      */
-    public function index() {
+    public function index()
+    {
         $cart = $this->getCart();
         if (!$cart) {
             return ['items' => [], 'total' => 0, 'cart_id' => null];
@@ -57,14 +62,14 @@ class CartController {
                 $firstCart = reset($cart);
                 $cart_id = is_array($firstCart) ? ($firstCart['cart_id'] ?? null) : null;
             }
-            
+
             if (!$cart_id) {
                 return ['items' => [], 'total' => 0, 'cart_id' => null];
             }
         }
 
         $items = $this->cart->getCartItems($cart_id);
-        
+
         // Enrich items with product details
         $enrichedItems = [];
         foreach ($items as $item) {
@@ -77,9 +82,10 @@ class CartController {
                 $imageBaseUrl = $basePath . UPLOAD_URL;
                 if ($mainImage && !empty($mainImage['image_path'])) {
                     $imagePath = ltrim($mainImage['image_path'], '/');
-                    $fullFilePath = dirname(__DIR__) . '/assets/images/products/' . $imagePath;
-                    if (file_exists($fullFilePath)) {
-                        $item['product']['main_image'] = $imageBaseUrl . $imagePath;
+                    $mainImage = $this->itemImage->getMainImage($item['item_id']);
+
+                    if ($mainImage && !empty($mainImage['image_path'])) {
+                        $item['product']['main_image'] = UPLOAD_URL . $mainImage['image_path'];
                     } else {
                         $item['product']['main_image'] = null;
                     }
@@ -112,7 +118,8 @@ class CartController {
     /**
      * Add item to cart
      */
-    public function add() {
+    public function add()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return ['success' => false, 'message' => 'Invalid request method'];
         }
@@ -141,7 +148,8 @@ class CartController {
     /**
      * Update cart item quantity
      */
-    public function update() {
+    public function update()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return ['success' => false, 'message' => 'Invalid request method'];
         }
@@ -159,7 +167,8 @@ class CartController {
     /**
      * Remove item from cart
      */
-    public function remove() {
+    public function remove()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return ['success' => false, 'message' => 'Invalid request method'];
         }
@@ -176,7 +185,8 @@ class CartController {
     /**
      * Get cart count
      */
-    public function getCount() {
+    public function getCount()
+    {
         $cart = $this->getCart();
         if (!$cart) {
             return 0;
@@ -191,4 +201,3 @@ class CartController {
         return $this->cart->getCartCount($cart_id);
     }
 }
-

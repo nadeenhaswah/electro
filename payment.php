@@ -1,6 +1,5 @@
 <?php
 $pageTitle = "Payment - Electro Electronics";
-require_once 'includes/header.php';
 require_once 'includes/access_control.php';
 
 // Require login - but prevent admins from placing orders
@@ -47,7 +46,8 @@ $order = $orderData['order'];
 // Display flash messages
 $errorMsg = getFlashMessage('error');
 ?>
-
+<?php require_once 'includes/header.php';
+?>
 <div class="container my-5">
     <h2 class="mb-4">Payment Information</h2>
 
@@ -74,7 +74,7 @@ $errorMsg = getFlashMessage('error');
                 <div class="card-body">
                     <form method="POST" action="payment.php?order_id=<?php echo $order['order_id']; ?>">
                         <input type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
-                        
+
                         <div class="mb-3">
                             <label class="form-label">Cardholder Name *</label>
                             <input type="text" name="cardholder_name" class="form-control" required>
@@ -123,4 +123,3 @@ $errorMsg = getFlashMessage('error');
 </div>
 
 <?php require_once 'includes/footer.php'; ?>
-

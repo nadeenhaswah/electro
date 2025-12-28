@@ -1,6 +1,5 @@
 <?php
 $pageTitle = "Shopping Cart - Electro Electronics";
-require_once 'includes/header.php';
 
 require_once 'controllers/CartController.php';
 
@@ -9,7 +8,7 @@ $cartController = new CartController();
 // Handle actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
-    
+
     if ($action === 'add') {
         $result = $cartController->add();
         setFlashMessage($result['success'] ? 'success' : 'error', $result['message']);
@@ -37,7 +36,8 @@ $cart_id = $data['cart_id'] ?? null;
 $successMsg = getFlashMessage('success');
 $errorMsg = getFlashMessage('error');
 ?>
-
+<?php require_once 'includes/header.php';
+?>
 <div class="container my-5">
     <h2 class="mb-4">Shopping Cart</h2>
 
@@ -132,4 +132,3 @@ $errorMsg = getFlashMessage('error');
 </div>
 
 <?php require_once 'includes/footer.php'; ?>
-

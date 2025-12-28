@@ -29,17 +29,19 @@ if (isLoggedIn()) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($pageTitle) ? $pageTitle : 'Electro - Electronics E-commerce'; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <?php 
+    <?php
     $assetsPath = (strpos($_SERVER['PHP_SELF'], '/auth/') !== false) ? '../assets/' : 'assets/';
     ?>
     <link rel="stylesheet" href="<?php echo $assetsPath; ?>css/style.css">
 </head>
+
 <body>
     <!-- Top Header -->
     <div class="bg-dark text-white py-2">
@@ -50,7 +52,7 @@ if (isLoggedIn()) {
                     <span class="ms-3"><i class="fas fa-envelope"></i> email@email.com</span>
                 </div>
                 <div class="col-md-6 text-end">
-                    <?php 
+                    <?php
                     $basePath = (strpos($_SERVER['PHP_SELF'], '/auth/') !== false) ? '../' : '';
                     if (isLoggedIn()): ?>
                         <span>Welcome, <?php echo htmlspecialchars($_SESSION['first_name']); ?>!</span>
@@ -71,7 +73,7 @@ if (isLoggedIn()) {
     <!-- Main Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container">
-            <?php 
+            <?php
             $basePath = (strpos($_SERVER['PHP_SELF'], '/auth/') !== false) ? '../' : '';
             ?>
             <a class="navbar-brand fw-bold" href="<?php echo $basePath; ?>index.php">ELECTRO</a>
@@ -129,4 +131,3 @@ if (isLoggedIn()) {
             </div>
         </div>
     </nav>
-

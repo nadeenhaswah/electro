@@ -1,11 +1,11 @@
 <?php
-$pageTitle = "Product Details - Electro Electronics";
-require_once 'includes/header.php';
 
 if (!isset($_GET['id'])) {
     header('Location: products.php');
     exit();
 }
+$pageTitle = "Product Details - Electro Electronics";
+require_once 'includes/header.php';
 
 require_once 'controllers/ProductController.php';
 require_once 'controllers/CartController.php';
@@ -74,7 +74,7 @@ $isInWishlist = isLoggedIn() ? $wishlistController->isInWishlist($product['item_
                     <strong>Made in:</strong> <?php echo htmlspecialchars($product['country_made']); ?><br>
                 <?php endif; ?>
                 <?php if (isset($product['quantity'])): ?>
-                    <strong>Stock:</strong> 
+                    <strong>Stock:</strong>
                     <?php if ($product['quantity'] > 0): ?>
                         <span class="badge bg-success"><?php echo $product['quantity']; ?> in stock</span>
                     <?php else: ?>
@@ -82,20 +82,20 @@ $isInWishlist = isLoggedIn() ? $wishlistController->isInWishlist($product['item_
                     <?php endif; ?>
                     <br>
                 <?php endif; ?>
-                
+
                 <!-- Average Rating Display -->
                 <?php if (isset($product['rating_average']) && $product['rating_average'] > 0): ?>
                     <div class="mt-2">
                         <strong>Rating:</strong>
                         <div class="d-flex align-items-center">
-                            <?php 
+                            <?php
                             $avgRating = $product['rating_average'];
-                            for ($i = 1; $i <= 5; $i++): 
+                            for ($i = 1; $i <= 5; $i++):
                             ?>
                                 <i class="fas fa-star <?php echo $i <= round($avgRating) ? 'text-warning' : 'text-muted'; ?>" style="font-size: 1.2rem;"></i>
                             <?php endfor; ?>
                             <span class="ms-2">
-                                <strong><?php echo number_format($avgRating, 1); ?></strong> 
+                                <strong><?php echo number_format($avgRating, 1); ?></strong>
                                 (<?php echo $product['rating_total']; ?> <?php echo $product['rating_total'] == 1 ? 'rating' : 'ratings'; ?>)
                             </span>
                         </div>
@@ -156,7 +156,7 @@ $isInWishlist = isLoggedIn() ? $wishlistController->isInWishlist($product['item_
                             <form method="POST" action="product.php?id=<?php echo $product['item_id']; ?>" id="reviewFormProduct">
                                 <input type="hidden" name="action" value="add_comment">
                                 <input type="hidden" name="item_id" value="<?php echo $product['item_id']; ?>">
-                                
+
                                 <div class="mb-3">
                                     <label class="form-label">Your Rating *</label>
                                     <div class="rating-input">
@@ -170,68 +170,68 @@ $isInWishlist = isLoggedIn() ? $wishlistController->isInWishlist($product['item_
                                     </div>
                                     <small class="form-text text-muted">Select a rating from 1 to 5 stars (required)</small>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label class="form-label">Your Review *</label>
                                     <textarea name="comment" class="form-control" rows="3" required></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit Review</button>
                             </form>
-                            
+
                             <script>
-                            let selectedRatingProduct = 0;
-                            
-                            function highlightStarsProduct(rating) {
-                                const stars = document.querySelectorAll('.rating-star-product');
-                                stars.forEach((star) => {
-                                    const starRating = parseInt(star.getAttribute('data-rating'));
-                                    if (starRating <= rating) {
-                                        star.style.color = '#ffc107';
+                                let selectedRatingProduct = 0;
+
+                                function highlightStarsProduct(rating) {
+                                    const stars = document.querySelectorAll('.rating-star-product');
+                                    stars.forEach((star) => {
+                                        const starRating = parseInt(star.getAttribute('data-rating'));
+                                        if (starRating <= rating) {
+                                            star.style.color = '#ffc107';
+                                        } else {
+                                            star.style.color = '#ddd';
+                                        }
+                                    });
+                                    updateRatingTextProduct(rating);
+                                }
+
+                                function resetStarsProduct() {
+                                    if (selectedRatingProduct === 0) {
+                                        const stars = document.querySelectorAll('.rating-star-product');
+                                        stars.forEach(star => {
+                                            star.style.color = '#ddd';
+                                        });
+                                        document.getElementById('ratingTextProduct').textContent = 'Click to rate';
                                     } else {
-                                        star.style.color = '#ddd';
+                                        highlightStarsProduct(selectedRatingProduct);
+                                    }
+                                }
+
+                                function setRatingProduct(rating) {
+                                    selectedRatingProduct = rating;
+                                    document.getElementById('ratingValueProduct').value = rating;
+                                    highlightStarsProduct(rating);
+                                    document.getElementById('ratingTextProduct').textContent = rating + ' out of 5 stars';
+                                }
+
+                                function updateRatingTextProduct(rating) {
+                                    const texts = {
+                                        1: '1 star - Poor',
+                                        2: '2 stars - Fair',
+                                        3: '3 stars - Good',
+                                        4: '4 stars - Very Good',
+                                        5: '5 stars - Excellent'
+                                    };
+                                    document.getElementById('ratingTextProduct').textContent = texts[rating] || 'Click to rate';
+                                }
+
+                                // Validate form submission
+                                document.getElementById('reviewFormProduct').addEventListener('submit', function(e) {
+                                    if (!document.getElementById('ratingValueProduct').value || document.getElementById('ratingValueProduct').value < 1) {
+                                        e.preventDefault();
+                                        alert('Please select a rating before submitting your review.');
+                                        return false;
                                     }
                                 });
-                                updateRatingTextProduct(rating);
-                            }
-                            
-                            function resetStarsProduct() {
-                                if (selectedRatingProduct === 0) {
-                                    const stars = document.querySelectorAll('.rating-star-product');
-                                    stars.forEach(star => {
-                                        star.style.color = '#ddd';
-                                    });
-                                    document.getElementById('ratingTextProduct').textContent = 'Click to rate';
-                                } else {
-                                    highlightStarsProduct(selectedRatingProduct);
-                                }
-                            }
-                            
-                            function setRatingProduct(rating) {
-                                selectedRatingProduct = rating;
-                                document.getElementById('ratingValueProduct').value = rating;
-                                highlightStarsProduct(rating);
-                                document.getElementById('ratingTextProduct').textContent = rating + ' out of 5 stars';
-                            }
-                            
-                            function updateRatingTextProduct(rating) {
-                                const texts = {
-                                    1: '1 star - Poor',
-                                    2: '2 stars - Fair',
-                                    3: '3 stars - Good',
-                                    4: '4 stars - Very Good',
-                                    5: '5 stars - Excellent'
-                                };
-                                document.getElementById('ratingTextProduct').textContent = texts[rating] || 'Click to rate';
-                            }
-                            
-                            // Validate form submission
-                            document.getElementById('reviewFormProduct').addEventListener('submit', function(e) {
-                                if (!document.getElementById('ratingValueProduct').value || document.getElementById('ratingValueProduct').value < 1) {
-                                    e.preventDefault();
-                                    alert('Please select a rating before submitting your review.');
-                                    return false;
-                                }
-                            });
                             </script>
                         </div>
                     </div>
@@ -249,7 +249,7 @@ $isInWishlist = isLoggedIn() ? $wishlistController->isInWishlist($product['item_
             <!-- Customer Reviews - Always Visible to All Users -->
             <div class="comments-list mt-4">
                 <h5 class="mb-3"><i class="fas fa-comments"></i> Customer Reviews</h5>
-                <?php 
+                <?php
                 // Comments are always visible to all users (logged in or not)
                 // Only approved comments (status = 1) are shown
                 // Filter out any empty or invalid comments
@@ -262,7 +262,7 @@ $isInWishlist = isLoggedIn() ? $wishlistController->isInWishlist($product['item_
                         }
                     }
                 }
-                
+
                 if (empty($approvedComments)): ?>
                     <p class="text-muted">No reviews yet. Be the first to review!</p>
                 <?php else: ?>
@@ -273,7 +273,7 @@ $isInWishlist = isLoggedIn() ? $wishlistController->isInWishlist($product['item_
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <div>
                                         <strong class="d-block">
-                                            <?php 
+                                            <?php
                                             if (!empty($comment['first_name']) || !empty($comment['last_name'])) {
                                                 echo htmlspecialchars(trim(($comment['first_name'] ?? '') . ' ' . ($comment['last_name'] ?? '')));
                                             } else {
@@ -282,8 +282,8 @@ $isInWishlist = isLoggedIn() ? $wishlistController->isInWishlist($product['item_
                                             ?>
                                         </strong>
                                         <small class="text-muted">
-                                            <i class="fas fa-calendar"></i> 
-                                            <?php 
+                                            <i class="fas fa-calendar"></i>
+                                            <?php
                                             if (!empty($comment['comment_date'])) {
                                                 echo date('F d, Y', strtotime($comment['comment_date']));
                                             }
@@ -332,4 +332,3 @@ if ($successMsg || $errorMsg):
 <?php endif; ?>
 
 <?php require_once 'includes/footer.php'; ?>
-

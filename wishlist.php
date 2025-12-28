@@ -1,6 +1,5 @@
 <?php
 $pageTitle = "Wishlist - Electro Electronics";
-require_once 'includes/header.php';
 require_once 'includes/access_control.php';
 
 // Require user access (regular users or admins can access)
@@ -13,16 +12,16 @@ $wishlistController = new WishlistController();
 // Handle actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
-    
+
     if ($action === 'add') {
         $result = $wishlistController->add();
         setFlashMessage($result['success'] ? 'success' : 'error', $result['message']);
-        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'wishlist.php'));
+        header('Location:' . ($_SERVER['HTTP_REFERER'] ?? 'wishlist.php'));
         exit();
     } elseif ($action === 'remove') {
         $result = $wishlistController->remove();
         setFlashMessage($result['success'] ? 'success' : 'error', $result['message']);
-        header('Location: wishlist.php');
+        // header('Location: wishlist.php');
         exit();
     }
 }
@@ -34,7 +33,8 @@ $items = $data['items'] ?? [];
 $successMsg = getFlashMessage('success');
 $errorMsg = getFlashMessage('error');
 ?>
-
+<?php require_once 'includes/header.php';
+?>
 <div class="container my-5">
     <h2 class="mb-4">My Wishlist</h2>
 
@@ -83,4 +83,3 @@ $errorMsg = getFlashMessage('error');
 </div>
 
 <?php require_once 'includes/footer.php'; ?>
-

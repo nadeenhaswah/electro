@@ -1,6 +1,5 @@
 <?php
 $pageTitle = "Add Review - Electro Electronics";
-require_once 'includes/header.php';
 require_once 'includes/access_control.php';
 
 // Require user to be logged in
@@ -63,7 +62,8 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
 // Display flash messages
 $errorMsg = getFlashMessage('error');
 ?>
-
+<?php require_once 'includes/header.php';
+?>
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -86,10 +86,10 @@ $errorMsg = getFlashMessage('error');
                             <div class="row align-items-center">
                                 <?php if (!empty($product['images'])): ?>
                                     <div class="col-auto">
-                                        <img src="<?php echo $product['images'][0]['image_url']; ?>" 
-                                             alt="<?php echo htmlspecialchars($product['name']); ?>" 
-                                             style="width: 80px; height: 80px; object-fit: cover;" 
-                                             class="rounded">
+                                        <img src="<?php echo $product['images'][0]['image_url']; ?>"
+                                            alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                            style="width: 80px; height: 80px; object-fit: cover;"
+                                            class="rounded">
                                     </div>
                                 <?php endif; ?>
                                 <div class="col">
@@ -108,7 +108,7 @@ $errorMsg = getFlashMessage('error');
                         <form method="POST" action="review.php?item_id=<?php echo $item_id; ?>" id="reviewForm">
                             <input type="hidden" name="action" value="add_review">
                             <input type="hidden" name="item_id" value="<?php echo $item_id; ?>">
-                            
+
                             <div class="mb-4">
                                 <label class="form-label">Your Rating *</label>
                                 <div class="rating-input">
@@ -122,7 +122,7 @@ $errorMsg = getFlashMessage('error');
                                 </div>
                                 <small class="form-text text-muted">Select a rating from 1 to 5 stars (required)</small>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label class="form-label">Your Review *</label>
                                 <textarea name="comment" class="form-control" rows="5" required placeholder="Share your experience with this product..."></textarea>
@@ -138,59 +138,59 @@ $errorMsg = getFlashMessage('error');
                         </form>
 
                         <script>
-                        let selectedRating = 0;
-                        
-                        function highlightStars(rating) {
-                            const stars = document.querySelectorAll('.rating-star');
-                            stars.forEach((star, index) => {
-                                const starRating = parseInt(star.getAttribute('data-rating'));
-                                if (starRating <= rating) {
-                                    star.style.color = '#ffc107';
+                            let selectedRating = 0;
+
+                            function highlightStars(rating) {
+                                const stars = document.querySelectorAll('.rating-star');
+                                stars.forEach((star, index) => {
+                                    const starRating = parseInt(star.getAttribute('data-rating'));
+                                    if (starRating <= rating) {
+                                        star.style.color = '#ffc107';
+                                    } else {
+                                        star.style.color = '#ddd';
+                                    }
+                                });
+                                updateRatingText(rating);
+                            }
+
+                            function resetStars() {
+                                if (selectedRating === 0) {
+                                    const stars = document.querySelectorAll('.rating-star');
+                                    stars.forEach(star => {
+                                        star.style.color = '#ddd';
+                                    });
+                                    document.getElementById('ratingText').textContent = 'Click to rate';
                                 } else {
-                                    star.style.color = '#ddd';
+                                    highlightStars(selectedRating);
+                                }
+                            }
+
+                            function setRating(rating) {
+                                selectedRating = rating;
+                                document.getElementById('ratingValue').value = rating;
+                                highlightStars(rating);
+                                document.getElementById('ratingText').textContent = rating + ' out of 5 stars';
+                            }
+
+                            function updateRatingText(rating) {
+                                const texts = {
+                                    1: '1 star - Poor',
+                                    2: '2 stars - Fair',
+                                    3: '3 stars - Good',
+                                    4: '4 stars - Very Good',
+                                    5: '5 stars - Excellent'
+                                };
+                                document.getElementById('ratingText').textContent = texts[rating] || 'Click to rate';
+                            }
+
+                            // Validate form submission
+                            document.getElementById('reviewForm').addEventListener('submit', function(e) {
+                                if (!document.getElementById('ratingValue').value || document.getElementById('ratingValue').value < 1) {
+                                    e.preventDefault();
+                                    alert('Please select a rating before submitting your review.');
+                                    return false;
                                 }
                             });
-                            updateRatingText(rating);
-                        }
-                        
-                        function resetStars() {
-                            if (selectedRating === 0) {
-                                const stars = document.querySelectorAll('.rating-star');
-                                stars.forEach(star => {
-                                    star.style.color = '#ddd';
-                                });
-                                document.getElementById('ratingText').textContent = 'Click to rate';
-                            } else {
-                                highlightStars(selectedRating);
-                            }
-                        }
-                        
-                        function setRating(rating) {
-                            selectedRating = rating;
-                            document.getElementById('ratingValue').value = rating;
-                            highlightStars(rating);
-                            document.getElementById('ratingText').textContent = rating + ' out of 5 stars';
-                        }
-                        
-                        function updateRatingText(rating) {
-                            const texts = {
-                                1: '1 star - Poor',
-                                2: '2 stars - Fair',
-                                3: '3 stars - Good',
-                                4: '4 stars - Very Good',
-                                5: '5 stars - Excellent'
-                            };
-                            document.getElementById('ratingText').textContent = texts[rating] || 'Click to rate';
-                        }
-                        
-                        // Validate form submission
-                        document.getElementById('reviewForm').addEventListener('submit', function(e) {
-                            if (!document.getElementById('ratingValue').value || document.getElementById('ratingValue').value < 1) {
-                                e.preventDefault();
-                                alert('Please select a rating before submitting your review.');
-                                return false;
-                            }
-                        });
                         </script>
                     <?php endif; ?>
                 </div>
@@ -200,4 +200,3 @@ $errorMsg = getFlashMessage('error');
 </div>
 
 <?php require_once 'includes/footer.php'; ?>
-

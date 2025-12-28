@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Wishlist Controller
  * Handles wishlist operations
@@ -10,12 +11,14 @@ require_once dirname(__DIR__) . '/classes/Wishlist.php';
 require_once dirname(__DIR__) . '/classes/Product.php';
 require_once dirname(__DIR__) . '/classes/ItemImage.php';
 
-class WishlistController {
+class WishlistController
+{
     private $wishlist;
     private $product;
     private $itemImage;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->wishlist = new Wishlist();
         $this->product = new Product();
         $this->itemImage = new ItemImage();
@@ -24,7 +27,8 @@ class WishlistController {
     /**
      * View wishlist
      */
-    public function index() {
+    public function index()
+    {
         if (!isLoggedIn()) {
             return ['error' => 'You must be logged in to view your wishlist'];
         }
@@ -35,16 +39,10 @@ class WishlistController {
         foreach ($items as &$item) {
             $item['final_price'] = $this->product->getFinalPrice($item);
             $mainImage = $this->itemImage->getMainImage($item['item_id']);
-            $basePath = (strpos($_SERVER['PHP_SELF'], '/auth/') !== false) ? '../' : '';
-            $imageBaseUrl = $basePath . UPLOAD_URL;
+            $mainImage = $this->itemImage->getMainImage($item['item_id']);
+
             if ($mainImage && !empty($mainImage['image_path'])) {
-                $imagePath = ltrim($mainImage['image_path'], '/');
-                $fullFilePath = dirname(__DIR__) . '/assets/images/products/' . $imagePath;
-                if (file_exists($fullFilePath)) {
-                    $item['main_image'] = $imageBaseUrl . $imagePath;
-                } else {
-                    $item['main_image'] = null;
-                }
+                $item['main_image'] = UPLOAD_URL . $mainImage['image_path'];
             } else {
                 $item['main_image'] = null;
             }
@@ -56,7 +54,8 @@ class WishlistController {
     /**
      * Add item to wishlist
      */
-    public function add() {
+    public function add()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return ['success' => false, 'message' => 'Invalid request method'];
         }
@@ -73,7 +72,8 @@ class WishlistController {
     /**
      * Remove item from wishlist
      */
-    public function remove() {
+    public function remove()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return ['success' => false, 'message' => 'Invalid request method'];
         }
@@ -90,7 +90,8 @@ class WishlistController {
     /**
      * Check if item is in wishlist
      */
-    public function isInWishlist($item_id) {
+    public function isInWishlist($item_id)
+    {
         if (!isLoggedIn()) {
             return false;
         }
@@ -101,7 +102,8 @@ class WishlistController {
     /**
      * Get wishlist count
      */
-    public function getCount() {
+    public function getCount()
+    {
         if (!isLoggedIn()) {
             return 0;
         }
@@ -109,4 +111,3 @@ class WishlistController {
         return $this->wishlist->getWishlistCount($_SESSION['user_id']);
     }
 }
-

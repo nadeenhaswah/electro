@@ -1,6 +1,5 @@
 <?php
 $pageTitle = "My Profile - Electro Electronics";
-require_once 'includes/header.php';
 require_once 'includes/access_control.php';
 
 // Require user to be logged in
@@ -40,7 +39,8 @@ if (isset($error)) {
     $errorMsg = $error;
 }
 ?>
-
+<?php require_once 'includes/header.php';
+?>
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -76,7 +76,7 @@ if (isset($error)) {
                                 <i class="fas fa-edit"></i> Edit Profile
                             </a>
                         </div>
-                        
+
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <strong><i class="fas fa-id-card"></i> Full Name:</strong>
@@ -100,7 +100,7 @@ if (isset($error)) {
                                 <strong><i class="fas fa-phone"></i> Mobile Number:</strong>
                             </div>
                             <div class="col-md-8">
-                                <?php 
+                                <?php
                                 if (!empty($user['mobile'])) {
                                     echo htmlspecialchars($user['mobile']);
                                 } else {
@@ -138,7 +138,7 @@ if (isset($error)) {
 
                         <form method="POST" action="profile.php">
                             <input type="hidden" name="action" value="update_profile">
-                            
+
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label">First Name *</label>
@@ -195,4 +195,3 @@ if (isset($error)) {
 </div>
 
 <?php require_once 'includes/footer.php'; ?>
-

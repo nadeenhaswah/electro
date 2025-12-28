@@ -108,21 +108,18 @@ class ProductController
         $images = $this->itemImage->getItemImages($item_id);
         $basePath = (strpos($_SERVER['PHP_SELF'], '/auth/') !== false) ? '../' : '';
         $imageBaseUrl = $basePath . UPLOAD_URL;
+        $images = $this->itemImage->getItemImages($item_id);
+
         foreach ($images as &$img) {
             if (!empty($img['image_path'])) {
-                $imagePath = ltrim($img['image_path'], '/');
-                foreach ($images as &$img) {
-                    if (!empty($img['image_path'])) {
-                        $imagePath = ltrim($img['image_path'], '/');
-                        $img['image_url'] = $imageBaseUrl . 'items/' . $imagePath;
-                    } else {
-                        $img['image_url'] = null;
-                    }
-                }
+                $img['image_url'] = UPLOAD_URL . $img['image_path'];
             } else {
                 $img['image_url'] = null;
             }
         }
+
+        // $product['images'] = $images;
+
         $product['images'] = $images;
         $product['comments'] = $this->comment->getProductComments($item_id, true);
 

@@ -1,6 +1,5 @@
 <?php
 $pageTitle = "Checkout - Electro Electronics";
-require_once 'includes/header.php';
 require_once 'includes/access_control.php';
 
 // Require login - but prevent admins from placing orders
@@ -42,7 +41,8 @@ if (empty($items)) {
 // Display flash messages
 $errorMsg = getFlashMessage('error');
 ?>
-
+<?php require_once 'includes/header.php';
+?>
 <div class="container my-5">
     <h2 class="mb-4">Checkout</h2>
 
@@ -80,4 +80,3 @@ $errorMsg = getFlashMessage('error');
 </div>
 
 <?php require_once 'includes/footer.php'; ?>
-
