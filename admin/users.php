@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/database.php';
+require_once 'config/database.php';
 // session_start();
 // في الواقع الحقيقي، يجب التحقق من صلاحية المستخدم
 // if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_role'] != 'admin') {

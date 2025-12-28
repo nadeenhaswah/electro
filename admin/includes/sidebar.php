@@ -65,7 +65,7 @@
                 </a>
             </li> -->
             <li class="nav-item">
-                <a class="nav-link" href="../login.php">
+                <a class="nav-link" href="../auth/login.php">
                     <i class="fas fa-sign-out-alt me-2"></i>
                     Logout
                 </a>

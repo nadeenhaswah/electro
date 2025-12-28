@@ -1,5 +1,5 @@
 <?php
-require_once '../config/database.php';
+require_once 'config/database.php';
 session_start();
 // في الواقع الحقيقي، يجب التحقق من صلاحية المستخدم
 // if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_role'] != 'admin') {
@@ -147,46 +147,46 @@ session_start();
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title text-white"><?= isset($category) ? 'Edit Category' : 'Add New Category'; ?></h5>
+                            <h5 class="modal-title text-white"><?= isset($category) ? 'Add Category' : 'Add New Category'; ?></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <form class="needs-validation" novalidate method="POST" action="add_category.php">
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label class="form-label">Category Name *</label>
-                                    <input type="text" name="name" class="form-control" required value="<?= $category['name'] ?? ''; ?>">
+                                    <input type="text" name="name" class="form-control" required >
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Description</label>
-                                    <textarea name="description" class="form-control"><?= $category['description'] ?? ''; ?></textarea>
+                                    <textarea name="description" class="form-control"></textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label">Discount Value (%)</label>
-                                        <input type="number" step="0.01" name="discount_value" class="form-control" value="<?= $category['discount_value'] ?? ''; ?>">
+                                        <input type="number" step="0.01" name="discount_value" class="form-control"  >
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label">Discount Start</label>
-                                        <input type="datetime-local" name="discount_start" class="form-control" value="<?= isset($category['discount_start']) ? date('Y-m-d\TH:i', strtotime($category['discount_start'])) : ''; ?>">
+                                        <input type="datetime-local" name="discount_start" class="form-control">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label">Discount End</label>
-                                        <input type="datetime-local" name="discount_end" class="form-control" value="<?= isset($category['discount_end']) ? date('Y-m-d\TH:i', strtotime($category['discount_end'])) : ''; ?>">
+                                        <input type="datetime-local" name="discount_end" class="form-control" >
                                     </div>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="visibility" value="1" <?= isset($category['visibility']) && $category['visibility'] ? 'checked' : ''; ?>>
+                                    <input class="form-check-input" type="checkbox" name="visibility">
                                     <label class="form-check-label">Visible</label>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="allow_comments" value="1" <?= isset($category['allow_comments']) && $category['allow_comments'] ? 'checked' : ''; ?>>
+                                    <input class="form-check-input" type="checkbox" name="allow_comments" >
                                     <label class="form-check-label">Allow Comments</label>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <input type="hidden" name="id" value="<?= $category['id'] ?? ''; ?>">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" name="submit" class="btn btn-primary"><?= isset($category) ? 'Update Category' : 'Add Category'; ?></button>
+                                <button type="submit" name="submit" class="btn btn-primary">Add Category</button>
                             </div>
                         </form>
                     </div>
