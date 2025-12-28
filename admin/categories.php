@@ -297,7 +297,7 @@ session_start();
                     });
                 </script>
             <?php
-                unset($_SESSION['alert']);
+                unset($_SESSION['alert_update']);
             endif;
             ?>
 

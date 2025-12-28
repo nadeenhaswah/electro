@@ -270,7 +270,7 @@ session_start();
                                                 <label class="form-label">Price <span class="text-danger">*</span></label>
                                                 <div class="input-group">
                                                     <span class="input-group-text">$</span>
-                                                    <input type="number" class="form-control" value="<?= $product['price'] ?>" name="price" required min="0" step="0.01" value="1299.99">
+                                                    <input type="number" class="form-control" value="<?= $product['price'] ?>" name="price" required min="0" step="0.01">
                                                 </div>
                                                 <div class="invalid-feedback">
                                                     Please enter price.
@@ -281,7 +281,7 @@ session_start();
                                                 <label class="form-label">Discount (%)</label>
                                                 <div class="input-group">
                                                     <input type="number" class="form-control" value="<?= $product['discount'] ?>"
-                                                        name="discount_value" min="0" max="100" step="0.01" value="10.00">
+                                                        name="discount_value" min="0" max="100" step="0.01">
                                                     <span class="input-group-text">%</span>
                                                 </div>
                                             </div>
@@ -307,7 +307,7 @@ session_start();
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Stock Quantity <span class="text-danger">*</span></label>
-                                                <input type="number" class="form-control" value="<?= $product['stock'] ?>" name="quantity" required min="0" value="15">
+                                                <input type="number" class="form-control" value="<?= $product['quantity'] ?>" name="quantity" required min="0">
                                                 <div class="invalid-feedback">
                                                     Please enter stock quantity.
                                                 </div>
@@ -317,9 +317,9 @@ session_start();
                                         </div>
                                         <?php
                                         // --- Stock & Status ---
-                                        if ($product['stock'] == 0) {
+                                        if ($product['quantity'] == 0) {
                                             $item_status = 'outofstock';
-                                        } elseif ($product['stock'] <= 5) {
+                                        } elseif ($product['quantity'] <= 5) {
                                             $item_status = 'lowstock';
                                         } else {
                                             $item_status = 'instock';
@@ -342,7 +342,7 @@ session_start();
 
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Country of Origin</label>
-                                                <input type="text" class="form-control" vlalue="<?= $product['country_made'] ?>" name="country_made" value="USA">
+                                                <input type="text" class="form-control" vlalue="<?= $product['country_made'] ?>" name="country_made">
                                             </div>
                                         </div>
 
@@ -474,13 +474,13 @@ session_start();
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Image Upload Functionality (same as add page)
+            // Image Upload Functionality
             const imageUpload = document.getElementById('imageUpload');
             const imageDropzone = document.getElementById('imageDropzone');
             const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-            let newUploadedImages = [];
+            let uploadedImages = [];
 
             // Open file browser on dropzone click
             imageDropzone.addEventListener('click', function() {
@@ -524,7 +524,6 @@ session_start();
                         addImagePreview(e.target.result, file.name);
                     };
                     reader.readAsDataURL(file);
-                    newUploadedImages.push(file);
                 }
             }
 
@@ -535,28 +534,23 @@ session_start();
                 preview.id = previewId;
                 preview.innerHTML = `
                     <img src="${src}" alt="${filename}">
-                    <div class="remove-btn" onclick="removeNewImagePreview('${previewId}')">
+                    <div class="remove-btn" onclick="removeImagePreview('${previewId}')">
                         <i class="fas fa-times"></i>
                     </div>
                 `;
                 imagePreviewContainer.appendChild(preview);
             }
 
-            window.removeNewImagePreview = function(previewId) {
+            window.removeImagePreview = function(previewId) {
                 const preview = document.getElementById(previewId);
                 if (preview) {
                     preview.remove();
-                    // Remove from newUploadedImages array
-                    const index = newUploadedImages.findIndex(img => img.name === preview.querySelector('img').alt);
-                    if (index > -1) {
-                        newUploadedImages.splice(index, 1);
-                    }
+
                 }
             };
 
             window.removeExistingImage = function(imageId) {
                 // In real application, send delete request to server
-                console.log(`Removing existing image ${imageId}`);
                 // Remove image element
                 const imageElement = document.querySelector(`.existing-image img[src*="${imageId}"]`)?.closest('.existing-image');
                 if (imageElement) {
@@ -565,42 +559,162 @@ session_start();
 
             };
 
+
             // Delete Product
-            document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+            document.querySelectorAll('.btn-delete').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-product-id');
+                    const productName = this.getAttribute('data-product-name');
+
+                    document.getElementById('deleteProductName').textContent = productName;
+                    document.getElementById('confirmDeleteProductBtn').setAttribute('data-product-id', productId);
+
+                    const modal = new bootstrap.Modal(document.getElementById('deleteProductModal'));
+                    modal.show();
+                });
+            });
+
+            // Confirm Delete
+            document.getElementById('confirmDeleteProductBtn').addEventListener('click', function() {
                 if (!document.getElementById('confirmProductDelete').checked) {
-                    alert('Please confirm that you understand this action cannot be undone.');
                     return;
                 }
 
+                const productId = this.getAttribute('data-product-id');
+
                 // In real application, send delete request to server
-                alert('Product deleted successfully!');
-                window.location.href = 'items.php';
-            });
+                console.log(`Deleting product ${productId}`);
 
-            // Form Validation
-            const editItemForm = document.getElementById('editItemForm');
-            editItemForm.addEventListener('submit', function(event) {
-                if (!editItemForm.checkValidity()) {
-                    event.stopPropagation();
-                } else {
-                    event.preventDefault();
-                    // In real application, submit form via AJAX
+                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteProductModal'));
+                modal.hide();
 
-                    // Collect form data
-                    const formData = new FormData(editItemForm);
-                    newUploadedImages.forEach((image, index) => {
-                        formData.append('new_images[]', image);
-                    });
-
-                    // Simulate form submission
-                    console.log('Updating product:', Object.fromEntries(formData));
-                    alert('Product updated successfully!');
-                    window.location.href = 'item_view.php?id=1';
+                // Remove product row from table
+                const productRow = document.querySelector(`[data-product-id="${productId}"]`);
+                if (productRow) {
+                    productRow.remove();
+                    updateProductCount();
                 }
-                editItemForm.classList.add('was-validated');
             });
+
+            // Search Functionality
+            const searchInput = document.getElementById('searchInput');
+            const clearSearch = document.getElementById('clearSearch');
+
+            searchInput.addEventListener('input', function() {
+                filterProducts();
+            });
+
+            clearSearch.addEventListener('click', function() {
+                searchInput.value = '';
+                filterProducts();
+            });
+
+            // Filter Functionality
+            const categoryFilter = document.getElementById('categoryFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            const clearFilters = document.getElementById('clearFilters');
+
+            categoryFilter.addEventListener('change', filterProducts);
+            statusFilter.addEventListener('change', filterProducts);
+
+            clearFilters.addEventListener('click', function() {
+                categoryFilter.value = '';
+                statusFilter.value = '';
+                filterProducts();
+            });
+
+            // Sort Functionality
+            document.querySelectorAll('.sort-option').forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sortType = this.getAttribute('data-sort');
+                    sortProducts(sortType);
+
+                    // Update active sort indicator
+                    document.querySelectorAll('.sort-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+
+
+
+
+            function filterProducts() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const category = categoryFilter.value;
+                const status = statusFilter.value;
+
+                document.querySelectorAll('#productsTable tbody tr').forEach(row => {
+                    const name = row.cells[1].textContent.toLowerCase();
+                    const sku = row.cells[2].textContent.toLowerCase();
+                    const rowCategory = row.cells[3].textContent;
+                    const rowStatus = row.cells[6].textContent.toLowerCase();
+
+                    const matchesSearch = searchTerm === '' ||
+                        name.includes(searchTerm) ||
+                        sku.includes(searchTerm);
+
+                    const matchesCategory = category === '' ||
+                        rowCategory.toLowerCase().includes(category.toLowerCase());
+
+                    const matchesStatus = status === '' ||
+                        rowStatus.includes(status.toLowerCase());
+
+                    row.style.display = matchesSearch && matchesCategory && matchesStatus ? '' : 'none';
+                });
+
+                updateProductCount();
+            }
+
+            function sortProducts(sortType) {
+                const rows = Array.from(document.querySelectorAll('#productsTable tbody tr'));
+                const tbody = document.querySelector('#productsTable tbody');
+
+                rows.sort((a, b) => {
+                    const aName = a.cells[1].textContent;
+                    const bName = b.cells[1].textContent;
+                    const aPrice = parseFloat(a.cells[4].querySelector('strong').textContent.replace('$', ''));
+                    const bPrice = parseFloat(b.cells[4].querySelector('strong').textContent.replace('$', ''));
+                    const aStock = parseInt(a.cells[5].querySelector('span').textContent);
+                    const bStock = parseInt(b.cells[5].querySelector('span').textContent);
+
+                    switch (sortType) {
+                        case 'name-asc':
+                            return aName.localeCompare(bName);
+                        case 'name-desc':
+                            return bName.localeCompare(aName);
+                        case 'price-asc':
+                            return aPrice - bPrice;
+                        case 'price-desc':
+                            return bPrice - aPrice;
+                        case 'date-new':
+                            // For demo, using ID as date proxy
+                            return parseInt(b.getAttribute('data-product-id')) - parseInt(a.getAttribute('data-product-id'));
+                        case 'date-old':
+                            return parseInt(a.getAttribute('data-product-id')) - parseInt(b.getAttribute('data-product-id'));
+                        default:
+                            return 0;
+                    }
+                });
+
+                // Reorder rows
+                rows.forEach(row => tbody.appendChild(row));
+            }
+
+            function updateProductCount() {
+                const visibleRows = document.querySelectorAll('#productsTable tbody tr[style=""]').length;
+                const totalRows = document.querySelectorAll('#productsTable tbody tr').length;
+                document.getElementById('productCount').textContent = `Showing: ${visibleRows} of ${totalRows} products`;
+            }
+
+
+
+            // Initialize
+            updateProductCount();
         });
-    </script> -->
+    </script>
 </body>
 
 </html>

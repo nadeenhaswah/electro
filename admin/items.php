@@ -306,9 +306,7 @@ session_start();
                                 </div>
                             </div>
 
-                            <button class="btn btn-outline-secondary" id="exportBtn">
-                                <i class="fas fa-download me-2"></i>Export
-                            </button>
+                           
                         </div>
                     </div>
                 </div>
@@ -317,7 +315,6 @@ session_start();
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Products List</h5>
-                        <span class="badge bg-primary" id="productCount">Total: 42 products</span>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">

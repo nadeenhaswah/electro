@@ -30,6 +30,8 @@ session_start();
 
     <!-- Admin CSS -->
     <link rel="stylesheet" href="assets/css/admin-style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <style>
         .order-timeline {
@@ -155,7 +157,7 @@ session_start();
                     </div>
                     <div class="btn-toolbar mb-2 mb-md-0">
 
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#updateStatusModal">
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-id="<?= $row['order_id'] ?>" data-bs-target="#updateStatusModal">
                             <i class="fas fa-edit"></i> Update Status
                         </button>
                     </div>
@@ -307,7 +309,7 @@ session_start();
                                     </table>
                                 </div>
                             </div>
-                           
+
                         </div>
 
 
@@ -496,38 +498,60 @@ session_start();
                     <h5 class="modal-title">Update Order Status</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form>
+                <form method="POST" action="editOrderstatus.php">
                     <div class="modal-body">
                         <div class="mb-3">
+                            <input type="hidden" id="order_id" name="order_id">
                             <label class="form-label">New Status</label>
-                            <select class="form-select" required>
+                            <select class="form-select" name="status" required>
                                 <option value="">Select Status</option>
                                 <option value="pending">Pending</option>
-                                <option value="processing" selected>Processing</option>
+                                <option value="processing">Processing</option>
                                 <option value="shipped">Shipped</option>
                                 <option value="completed">Completed</option>
                                 <option value="cancelled">Cancelled</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Notes (Optional)</label>
-                            <textarea class="form-control" rows="3" placeholder="Add any notes about this status change..."></textarea>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="notifyCustomer">
-                            <label class="form-check-label" for="notifyCustomer">
-                                Notify customer via email
-                            </label>
-                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Update Status</button>
+                        <button type="submit" name="submit" class="btn btn-primary">Update Status</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <script>
+        const updateStatusModal = document.getElementById('updateStatusModal');
+
+        updateStatusModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+
+            document.getElementById('order_id').value = id;
+        });
+    </script>
+
+    <?php
+
+    if (isset($_SESSION['alert'])):
+        $alert = $_SESSION['alert'];
+    ?>
+        <script>
+            Swal.fire({
+                icon: '<?= $alert['type']; ?>',
+                title: '<?= $alert['title']; ?>',
+                text: '<?= $alert['text']; ?>',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    <?php
+        unset($_SESSION['alert']);
+    endif;
+    ?>
 
     <!-- Payment Details Modal -->
     <div class="modal fade" id="paymentDetailsModal" tabindex="-1">
@@ -641,20 +665,20 @@ session_start();
     <script src="assets/js/admin.js"></script>
 
     <script>
-        // Timeline interaction
-        document.addEventListener('DOMContentLoaded', function() {
-            // Timeline steps clickable for demo
-            const timelineSteps = document.querySelectorAll('.timeline-step');
-            timelineSteps.forEach(step => {
-                step.addEventListener('click', function() {
-                    if (!this.classList.contains('active') && !this.classList.contains('completed')) {
-                        alert('This status is not yet active. You can update the order status using the "Update Status" button.');
-                    }
-                });
-            });
+        // // Timeline interaction
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     // Timeline steps clickable for demo
+        //     const timelineSteps = document.querySelectorAll('.timeline-step');
+        //     timelineSteps.forEach(step => {
+        //         step.addEventListener('click', function() {
+        //             if (!this.classList.contains('active') && !this.classList.contains('completed')) {
+        //                 alert('This status is not yet active. You can update the order status using the "Update Status" button.');
+        //             }
+        //         });
+        //     });
 
 
-        });
+        // });
     </script>
 </body>
 

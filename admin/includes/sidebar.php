@@ -25,48 +25,45 @@
                     Products
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="item_images.php">
-                    <i class="fas fa-images me-2"></i>
-                    Product Images
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="comments.php">
-                    <i class="fas fa-comments me-2"></i>
-                    Comments
-                </a>
-            </li>
+
+
             <li class="nav-item">
                 <a class="nav-link" href="orders.php">
                     <i class="fas fa-shopping-cart me-2"></i>
                     Orders
                 </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="payments.php">
                     <i class="fas fa-credit-card me-2"></i>
                     Payments
                 </a>
-            </li>
+            </li> -->
+
             <li class="nav-item">
+                <a class="nav-link" href="comments.php">
+                    <i class="fas fa-comments me-2"></i>
+                    Comments
+                </a>
+            </li>
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="carts.php">
                     <i class="fas fa-shopping-bag me-2"></i>
                     Carts
                 </a>
-            </li>
-            <li class="nav-item">
+            </li> -->
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="wishlists.php">
                     <i class="fas fa-heart me-2"></i>
                     Wishlists
                 </a>
-            </li>
-            <li class="nav-item">
+            </li> -->
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="settings.php">
                     <i class="fas fa-cog me-2"></i>
                     Settings
                 </a>
-            </li>
+            </li> -->
             <li class="nav-item">
                 <a class="nav-link" href="../login.php">
                     <i class="fas fa-sign-out-alt me-2"></i>

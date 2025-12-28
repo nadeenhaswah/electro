@@ -224,7 +224,7 @@ require_once '../config/database.php';
             </div>
         </div>
     </div>
-    
+
 
     <!-- Delete Confirmation Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1">
