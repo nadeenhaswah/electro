@@ -461,7 +461,7 @@ session_start();
                                                         <a href="item_view.php?id=<?php echo $product['id']; ?>" class="btn btn-action btn-outline-primary" title="View">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
-                                                        <a href="item_edit.php?id=<?php echo $product['id']; ?>" class="btn btn-action btn-outline-warning" title="Edit">
+                                                        <a href="edit_item.php?id=<?php echo $product['id']; ?>" class="btn btn-action btn-outline-warning" title="Edit">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <button
@@ -736,7 +736,25 @@ session_start();
             });
         </script>
     <?php
-        unset($_SESSION['alert_update']);
+        unset($_SESSION['alert_add']);
+    endif;
+    ?>
+    <?php
+
+    if (isset($_SESSION['alert_edit'])):
+        $alert = $_SESSION['alert_edit'];
+    ?>
+        <script>
+            Swal.fire({
+                icon: '<?= $alert['type']; ?>',
+                title: '<?= $alert['title']; ?>',
+                text: '<?= $alert['text']; ?>',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    <?php
+        unset($_SESSION['alert_edit']);
     endif;
     ?>
     <?php
@@ -754,7 +772,7 @@ session_start();
             });
         </script>
     <?php
-        unset($_SESSION['alert_update']);
+        unset($_SESSION['alert']);
     endif;
     ?>
     <script>
