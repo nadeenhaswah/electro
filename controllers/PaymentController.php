@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Payment Controller
  * Handles fake payment processing
@@ -10,12 +11,14 @@ require_once dirname(__DIR__) . '/classes/Payment.php';
 require_once dirname(__DIR__) . '/classes/Order.php';
 require_once dirname(__DIR__) . '/classes/ItemImage.php';
 
-class PaymentController {
+class PaymentController
+{
     private $payment;
     private $order;
     private $itemImage;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->payment = new Payment();
         $this->order = new Order();
         $this->itemImage = new ItemImage();
@@ -24,7 +27,13 @@ class PaymentController {
     /**
      * Process payment
      */
-    public function process() {
+    public function maskCardNumber($cardNumber)
+    {
+        $last4 = substr($cardNumber, -4);
+        return str_repeat('*', strlen($cardNumber) - 4) . $last4;
+    }
+    public function process()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return ['success' => false, 'message' => 'Invalid request method'];
         }
@@ -75,13 +84,14 @@ class PaymentController {
     /**
      * Get payment invoice
      */
-    public function invoice($order_id) {
+    public function invoice($order_id)
+    {
         if (!isLoggedIn()) {
             return ['error' => 'You must be logged in'];
         }
 
         $order = $this->order->getById($order_id);
-        
+
         if (!$order) {
             return ['error' => 'Order not found'];
         }
@@ -105,5 +115,3 @@ class PaymentController {
         ];
     }
 }
-
-
